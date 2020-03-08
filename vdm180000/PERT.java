@@ -15,7 +15,6 @@ import idsa.Graph.Edge;
 import idsa.Graph.GraphAlgorithm;
 import idsa.Graph.Factory;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Scanner;
