@@ -4,13 +4,13 @@
  */
 
 // change to your netid
-package YXJ180004;
+package vdm180000;
 
-import YXJ180004.Graph.Vertex;
-import YXJ180004.Graph.Edge;
-import YXJ180004.Graph.GraphAlgorithm;
-import YXJ180004.Graph.Factory;
-import YXJ180004.Graph.Timer;
+import vdm180000.Graph.Vertex;
+import vdm180000.Graph.Edge;
+import vdm180000.Graph.GraphAlgorithm;
+import vdm180000.Graph.Factory;
+import vdm180000.Graph.Timer;
 
 import java.io.FileInputStream;
 import java.util.*;
