@@ -4,13 +4,13 @@
  */
 
 // change to your netid
-package idsa;
+package vdm18000;
 
-import idsa.Graph.Vertex;
-import idsa.Graph.Edge;
-import idsa.Graph.GraphAlgorithm;
-import idsa.Graph.Factory;
-import idsa.Graph.Timer;
+import vdm18000.Graph.Vertex;
+import vdm18000.Graph.Edge;
+import vdm18000.Graph.GraphAlgorithm;
+import vdm18000.Graph.Factory;
+import vdm18000.Graph.Timer;
 
 import java.util.Iterator;
 import java.io.File;
