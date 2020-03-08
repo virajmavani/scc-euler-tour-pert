@@ -18,17 +18,15 @@ import java.util.*;
 
 public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
 
-    // topNum is the count of all the vertices in the graph
-    private int topNum;
-    // list of vertices in topological order
+    
+   
+    private int cno;
     private List<Vertex> finishList;
+    private int topOrd;
 
     // flag to determine if graph contains a cycle or a back edge
     private boolean isCycle;
-
-    //global counter for component number
-    private int cno;
-
+    
     public boolean isCycle() {
         return isCycle;
     }
@@ -86,7 +84,7 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
 
     public DFS(Graph g) {
         super(g, new DFSVertex(null));
-        topNum = g.size();// initializes topNum with count of vertices in a graph
+        topOrd = g.size();// initializes topOrd with count of vertices in a graph
         finishList = new LinkedList<>();
         setCycle(false);// flag to detect a cycle in the graph, initialized with false
         cno = 0;// initially component number is set to 0
@@ -102,7 +100,7 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
 
     // helper method to compute depth first order of a graph
     public void dfs() {
-        topNum = g.size();
+        topOrd = g.size();
         for (Vertex u : g) {
             get(u).color = 0;
             get(u).setParent(null);
@@ -134,7 +132,7 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
                 setCycle(true);// back edge detected
             }
         }
-        get(u).top = topNum--;
+        get(u).top = topOrd--;
         finishList.add(0, u);
         get(u).color = 2;
     }
@@ -143,7 +141,7 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
     // computes finishList on a reversed graph by going through nodes  in decreasing finish time in first dfs traversal
     private void dfs(Iterable<Vertex> iterable) {
 
-        topNum = g.size();
+        topOrd = g.size();
 
         for (Vertex u : iterable) {
             get(u).color = 0;
