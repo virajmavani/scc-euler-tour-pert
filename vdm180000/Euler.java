@@ -7,11 +7,13 @@
 // change to your netid
 package vdm180000;
 
-import vdm180000.Graph.Vertex;
-import vdm180000.Graph.Edge;
-import vdm180000.Graph.GraphAlgorithm;
-import vdm180000.Graph.Factory;
-import vdm180000.Graph.Timer;
+import idsa.Graph;
+import idsa.Graph.Vertex;
+import idsa.Graph.Edge;
+import idsa.Graph.GraphAlgorithm;
+import idsa.Graph.Factory;
+import idsa.Graph.Timer;
+import idsa.Graph.AdjList;
 
 import java.io.FileInputStream;
 import java.util.*;

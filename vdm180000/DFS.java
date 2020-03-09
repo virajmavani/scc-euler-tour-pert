@@ -7,11 +7,11 @@
 
 package vdm180000;
 
-import vdm180000.Graph;
-import vdm180000.Graph.Vertex;
-import vdm180000.Graph.Edge;
-import vdm180000.Graph.GraphAlgorithm;
-import vdm180000.Graph.Factory;
+import idsa.Graph;
+import idsa.Graph.Vertex;
+import idsa.Graph.Edge;
+import idsa.Graph.GraphAlgorithm;
+import idsa.Graph.Factory;
 
 import java.io.File;
 import java.util.*;

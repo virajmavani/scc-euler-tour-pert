@@ -4,7 +4,7 @@
  * 2018/11/06
  */
 
-package vdm18000;
+package idsa;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -423,7 +423,7 @@ public class Graph implements Iterable<Graph.Vertex> {
      */
     public class AdjList {
 		Vertex vertex;
-		List<Edge> outEdges, inEdges;
+		public List<Edge> outEdges, inEdges;
 
 		public AdjList(int n) { // create an empty AdjList entry for Vertex named n
 			vertex = new Vertex(n);
