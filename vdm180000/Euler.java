@@ -153,10 +153,6 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
             in = new Scanner(inputFile);
         } else {
             String input = "9 13 1 2 1 2 3 1 3 1 1 3 4 1 4 5 1 5 6 1 6 3 1 4 7 1 7 8 1 8 4 1 5 7 1 7 9 1 9 5 1";
-
-//            String input = "5 6   2 1 1   1 3 1   3 2 1   1 4 1   4 5 1   5 1 1";
-//
-//            String input ="7 10   1 3 1   1 7 1   2 3 1   3 1 1   3 4 1   4 5 1   5 3 1   5 6 1   6 1 1   7 5 1";
             in = new Scanner(input);
         }
         int start = 1;
