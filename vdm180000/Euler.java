@@ -115,34 +115,38 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
     }
 
 
-    public List<Vertex> findEulerTour(boolean isEuler) {
-	if(!isEuler) {
-	    return new LinkedList<Vertex>();
-	}
-	for(Vertex u: g){
-	    LinkedList<Edge> list = new LinkedList<>();
-	    for(Edge e: g.outEdges(u))
-	        list.add(e);
-	    edge_counter.put(u, list);
-    }
+    /**
+     * Function to find Euler Tour in an Eulerian Graph
+     * @return List with Euler Tour
+     */
+    public List<Vertex> findEulerTour() {
+        if(!isEulerian()) {
+            return new LinkedList<Vertex>();
+        }
+        
+        for( Vertex u: g ){
+            LinkedList<Edge> l = new LinkedList<>();
+            for( Edge e: g.outEdges(u) ) {
+                l.add(e);
+            }
+            edge_counter.put(u, l);
+        }
 
-	topoList.addFirst(start);
-	Vertex curr = start;
-	while(!topoList.isEmpty()){
-	    if(edge_counter.get(curr).size() > 0){
-	        topoList.addFirst(curr);
-	        Edge ed = edge_counter.get(curr).getLast();
-	        Vertex next = ed.otherEnd(curr);
-	        edge_counter.get(curr).removeLast();
-	        curr = next;
+        topoList.addFirst(start);
+        Vertex curr = start;
+        while( !topoList.isEmpty() ){
+            if( edge_counter.get(curr).size() > 0 ){
+                topoList.addFirst(curr);
+                Edge ed = edge_counter.get(curr).getLast();
+                Vertex next = ed.otherEnd(curr);
+                edge_counter.get(curr).removeLast();
+                curr = next;
+            } else {
+                tour.addFirst(curr);
+                curr = topoList.removeFirst();
+            }
         }
-	    else{
-	        tour.addFirst(curr);
-	        curr = topoList.removeFirst();
-        }
-    }
-       // Graph is Eulerian...find the tour and return tour
-	return tour;
+	    return tour;
     }
 
     public static void main(String[] args) throws Exception {
@@ -168,31 +172,30 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
 
         Timer timer = new Timer();
 
-
         Euler euler = new Euler(g, startVertex);
         euler.setVerbose(VERBOSE);
         Boolean isEuler = euler.isEulerian();
-        System.out.println("Is Eulerian? "+isEuler);
+        System.out.print("Is Eulerian?: ");
+        if (isEuler) {
+            System.out.println("Yes.");
+        } else {
+            System.out.println("No.");
+        }
 
-	    List<Vertex> tour = euler.findEulerTour(isEuler);
-
+	    List<Vertex> tour = euler.findEulerTour();
 
         timer.end();
         if(VERBOSE > 0) {
             if(tour.size() > 0){
-                System.out.println("Output:");
-                // print the tour as sequence of vertices (e.g., 3,4,6,5,2,5,1,3)
+                System.out.println("Output: ");
                 for(Vertex i: tour)
                     System.out.print((i.getIndex()+1)+" ");
+            } else {
+                System.out.println("Euler Tour doesn't exist.");
             }
-            else
-                System.out.println("Not a Eulerian Graph");
-
-	    System.out.println();
+	        System.out.println();
         }
         System.out.println(timer);
-
-
     }
 
     public void setVerbose(int ver) {
