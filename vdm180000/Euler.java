@@ -1,6 +1,7 @@
 /** Starter code for LP2
- *  @author rbk ver 1.0
- *  @author SA ver 1.1
+ *  @author Ayesha Gurnani (ang170003)
+ *  @author Rutali Bandivadekar 
+ *  @author Viraj Mavani (vdm180000)
  */
 
 // change to your netid
@@ -18,9 +19,8 @@ import java.io.File;
 
 
 public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
-
-    LinkedList<Vertex> finishList = new LinkedList<>(); // list contains vertices in topological order
-    HashMap<Vertex, LinkedList<Edge>> edge_cnt = new HashMap<>();
+    LinkedList<Vertex> topoList = new LinkedList<>(); // list contains vertices in topological order
+    HashMap<Vertex, LinkedList<Edge>> edge_counter = new HashMap<>();
     static int VERBOSE = 1;
     Vertex start;
     LinkedList<Vertex> tour;
@@ -52,29 +52,31 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
 
     public boolean isEulerian() {
 
-        boolean SC = true;
-        boolean inOutDegree = true;
+        boolean strongly_connected = true;
+        boolean iod = true;
         if(!stronglyConnectedComponents()){
-            SC = false;
-            System.out.println("The graphs are not strongly connected");
+            strongly_connected = false;
+            System.out.println("Graph is not strongly connected");
         }
 
         for(Vertex u: g){
             if(g.adj(u).outEdges.size() != g.adj(u).inEdges.size()){
-                inOutDegree = false;
-                System.out.println("inDegree = "+g.getVertex(u).inDegree()+
-                        " and outDegree = "+g.getVertex(u).outDegree()+
-                        " at Vertex = "+u.getIndex());
+                iod = false;
+                String output_msg = "in-degree = " + g.getVertex(u).inDegree() + " and out-degree = " + g.getVertex(u).outDegree() + " at Vertex = " + u.getIndex();
+                System.out.println(output_msg);
             }
         }
 
-        return (SC && inOutDegree);
+        return (strongly_connected && iod);
 
     }
 
-    private boolean stronglyConnectedComponents(){
-
-        dfsVisit(g,start);
+    /**
+     * Function to check if Graph is strongly connected
+     * @return
+     */
+    public boolean stronglyConnectedComponents(){
+        visitDFS(g,start);
         for(Vertex u: g){
             if(get(u).seen == false){
                 return false;
@@ -86,24 +88,27 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
             get(u).seen = false;
         }
 
-        dfsVisit(g, start);
-
+        visitDFS(g, start);
         for(Vertex u: g){
             if(get(u).seen == false){
                 return false;
             }
         }
-
         return true;
-
     }
 
-    public void dfsVisit(Graph g, Vertex u){
+
+    /**
+     * DFS Traversal of Graph
+     * @param g - Graph to be traversed
+     * @param u - Vertex to start traversal from
+     */
+    public void visitDFS(Graph g, Vertex u){
         if(!get(u).seen){
             get(u).seen = true;
             for(Edge e: g.incident(u)) {
                 Vertex v = e.otherEnd(u);
-                dfsVisit(g,v);
+                visitDFS(g,v);
             }
         }
     }
@@ -117,22 +122,22 @@ public class Euler extends GraphAlgorithm<Euler.EulerVertex> {
 	    LinkedList<Edge> list = new LinkedList<>();
 	    for(Edge e: g.outEdges(u))
 	        list.add(e);
-	    edge_cnt.put(u, list);
+	    edge_counter.put(u, list);
     }
 
-	finishList.addFirst(start);
+	topoList.addFirst(start);
 	Vertex curr = start;
-	while(!finishList.isEmpty()){
-	    if(edge_cnt.get(curr).size() > 0){
-	        finishList.addFirst(curr);
-	        Edge ed = edge_cnt.get(curr).getLast();
+	while(!topoList.isEmpty()){
+	    if(edge_counter.get(curr).size() > 0){
+	        topoList.addFirst(curr);
+	        Edge ed = edge_counter.get(curr).getLast();
 	        Vertex next = ed.otherEnd(curr);
-	        edge_cnt.get(curr).removeLast();
+	        edge_counter.get(curr).removeLast();
 	        curr = next;
         }
 	    else{
 	        tour.addFirst(curr);
-	        curr = finishList.removeFirst();
+	        curr = topoList.removeFirst();
         }
     }
        // Graph is Eulerian...find the tour and return tour
