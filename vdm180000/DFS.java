@@ -7,24 +7,20 @@
 
 package vdm180000;
 
-import vdm18000.Graph;
-import vdm18000.Graph.Vertex;
-import vdm18000.Graph.Edge;
-import vdm18000.Graph.GraphAlgorithm;
-import vdm18000.Graph.Factory;
+import vdm180000.Graph;
+import vdm180000.Graph.Vertex;
+import vdm180000.Graph.Edge;
+import vdm180000.Graph.GraphAlgorithm;
+import vdm180000.Graph.Factory;
 
 import java.io.File;
 import java.util.*;
 
 public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
-
-    
    
     private int cno;
-    private List<Vertex> finishList;
+    private List<Vertex> outList;
     private int topOrd;
-
-    // flag to determine if graph contains a cycle or a back edge
     private boolean isCycle;
     
     public boolean isCycle() {
@@ -37,18 +33,32 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
 
 
     public static class DFSVertex implements Factory {
-        // component number of a vertex
         private int cno;
-
-        // assigns a numerical value to each vertex in the graph to refer it's topological order
-        private int top;
-        // assigns a color to each vertex in the graph
-        /*
-        0: white vertex (undiscovered vertex)
-        1: gray vertex (discovered vertex whose adjacent vertices are still undiscovered)
-        2: black vertex (discovered vertex whose adjacent vertices are discovered)
+        
+        /** assigns a color to each vertex in the graph
+         * 0: white vertex for vertex which is not dicovered yet.
+         * 1: gray vertex for vertex which is discovered but edges are yet to be discovered.
+         * 2: black vertex for vertex which is dicovered as well as edges are also discovered.
          */
         private int color;
+        private Vertex parent;
+        private boolean seen;
+        private int inDegreeCount;
+        private int top;
+        
+        public DFSVertex(Vertex u) {
+            top = 0;
+            cno = 0;
+            inDegreeCount = 0;
+            seen = false;
+            color = 0;
+            setParent(null);
+            
+        }
+
+        public DFSVertex make(Vertex u) {
+            return new DFSVertex(u);
+        }
 
         public Vertex getParent() {
             return parent;
@@ -58,47 +68,37 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
             this.parent = parent;
         }
 
-        // stores the parent of the vertex while doing depth first traversal
-        private Vertex parent;
 
-        // flag to check if vertex is visited or not
-        private boolean seen;
-
-        // stores the number of incomming edges for a vertex
-        private int inDegreeCount;
-
-
-        public DFSVertex(Vertex u) {
-            seen = false;
-            color = 0;// initially a vertex is coloured as white
-            setParent(null);
-            top = 0;
-            cno = 0;
-            inDegreeCount = 0;
-        }
-
-        public DFSVertex make(Vertex u) {
-            return new DFSVertex(u);
-        }
     }
 
+    /**
+     * 
+     * @param g
+     * This method initializes topOrd with the size of the vertices in the graph, initializes cycle as false, and cno as 0.
+     */
     public DFS(Graph g) {
         super(g, new DFSVertex(null));
-        topOrd = g.size();// initializes topOrd with count of vertices in a graph
-        finishList = new LinkedList<>();
-        setCycle(false);// flag to detect a cycle in the graph, initialized with false
-        cno = 0;// initially component number is set to 0
+        topOrd = g.size();
+        outList = new LinkedList<>();
+        setCycle(false);
+        cno = 0;
 
     }
 
-    // computes depth first order of a graph
+    /**
+     * 
+     * @param g
+     * @return depth first search of graph
+     */
     public static DFS depthFirstSearch(Graph g) {
         DFS d = new DFS(g);
         d.dfs();
         return d;
     }
 
-    // helper method to compute depth first order of a graph
+    /**
+     * DFS helper
+     */
     public void dfs() {
         topOrd = g.size();
         for (Vertex u : g) {
@@ -108,37 +108,41 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
         }
         for (Vertex u : g) {
             if (!get(u).seen) {
-                dfsVisit(u);
+                visitNode(u);
             }
         }
     }
 
-    // Recursively visits vertex in depth first order
-    /*
-    Whenever a back edge is detected this function sets isCycle flag to true.
-    This flag (isCycle) decides whether a topological order is possible or not.
+    
+    /**
+     * 
+     * Function to visit nodes in Depth First order and detect cycle while at it.
+     * Also populates the topological ordering list
+     * @param u
      */
-    private void dfsVisit(Vertex u) {
-        get(u).color = 1;// vertex is coloured as gray
+    private void visitNode(Vertex u) {
+        get(u).color = 1;
         get(u).seen = true;
         get(u).cno = cno;
         for (Edge e : g.incident(u)) {
             Vertex v = e.otherEnd(u);
 
-            if (!get(v).seen) { // white vertex
+            if (!get(v).seen) { 
                 get(v).setParent(u);
-                dfsVisit(v);
+                visitNode(v);
             } else if (get(u).top >= get(v).top) {
-                setCycle(true);// back edge detected
+                setCycle(true);
             }
         }
         get(u).top = topOrd--;
-        finishList.add(0, u);
+        outList.add(0, u);
         get(u).color = 2;
     }
 
-
-    // computes finishList on a reversed graph by going through nodes  in decreasing finish time in first dfs traversal
+    /**
+     * dfs helper
+     * @param iterable
+     */    
     private void dfs(Iterable<Vertex> iterable) {
 
         topOrd = g.size();
@@ -148,12 +152,12 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
             get(u).seen = false;
             get(u).setParent(null);
         }
-        finishList = new LinkedList<>();
+        outList = new LinkedList<>();
         cno = 0;
         for (Vertex u : iterable) {
             if (!get(u).seen) {
                 cno++;
-                dfsVisit(u);
+                visitNode(u);
             }
         }
     }
@@ -163,33 +167,45 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
     Based on isCycle flag, this function returns either null or list of vertices in topological order.
      */
     public List<Vertex> topologicalOrder1() {
-        return isCycle() ? null : this.finishList;
+        return isCycle() ? null : this.outList;
     }
 
-
-    // Find the number of connected components of the graph g by running dfs.
-    // Enter the component number of each vertex u in u.cno.
-    // Note that the graph g is available as a class field via GraphAlgorithm.
+    /**
+     * Method to find the number of connected components of the graph.
+     * @return
+     */
     public int connectedComponents() {
         return cno;
     }
 
-    // After running the connected components algorithm, the component no of each vertex can be queried.
+    /**
+     * 
+     * @param u
+     * @return
+     */
     public int cno(Vertex u) {
         return get(u).cno;
     }
 
-    // Find topological oder of a DAG using DFS. Returns null if g is not a DAG.
+    /**
+     * 
+     * @param g
+     * @return
+     */
     public static List<Vertex> topologicalOrder1(Graph g) {
         DFS d = depthFirstSearch(g);
         return d.topologicalOrder1();
     }
 
-    // Find the number of strongly connected components of the graph g.
+    /**
+     * Method to find strongly connected component of the graph.
+     * @param g
+     * @return dfs
+     */
     public static DFS stronglyConnectedComponents(Graph g) {
         DFS d = new DFS(g);
         d.dfs(g);
-        List<Vertex> vertexList = d.finishList;
+        List<Vertex> vertexList = d.outList;
         g.reverseGraph();
         d.dfs(vertexList);
         g.reverseGraph();
@@ -202,7 +218,7 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
     public static void main(String[] args) throws Exception {
 
 
-        String string = "5 9   1 2 1   2 1 1   1 3 1   1 4 1   1 5 1   2 4 1   3 4 1   4 5 1   3 5 1";//dag
+        String string = "5 8   2 1 1   1 3 1   1 4 1   1 5 1   2 4 1   3 4 1   4 5 1   3 5 1";
 
         Scanner in;
         // If there is a command line argument, use it as file from which
@@ -224,12 +240,17 @@ public class DFS extends GraphAlgorithm<DFS.DFSVertex> {
         }
         System.out.println("\n");
 
+        
+
         DFS dfs = stronglyConnectedComponents(g);
-        System.out.println("Vertex  ComponentNo:\n");
-        for (Vertex vertex : dfs.finishList) {
+        System.out.println("\nTotal strong components in the graph are: " + dfs.cno);
+        System.out.println("=============================");
+        System.out.println("Vertex  Component:\n");
+        for (Vertex vertex : dfs.outList) {
+            System.out.println("-----------------------");
             System.out.println(vertex.getName() + "   :    " + dfs.cno(vertex));
         }
-        System.out.println("\nNumber of strongly connected components in the graph: " + dfs.cno);
+        
 
 
     }
