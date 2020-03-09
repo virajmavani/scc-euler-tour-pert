@@ -1,10 +1,8 @@
 /** Starter code for PERT algorithm (LP2)
-* @author rbk
-* @authors - 
-* Ayesha Gurnani : ang170003
-* Viraj Mavani : vdm180000
-* Rutali Bandivadekar : rdb170002
-*/
+ * @author Ayesha Gurnani : ang170003
+ * @author Rutali Bandivadekar : rdb170002
+ * @author Viraj Mavani : vdm180000
+ */
 
 // change package to your netid
 package vdm180000;

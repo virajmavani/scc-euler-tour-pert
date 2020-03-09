@@ -1,7 +1,8 @@
 /**
- * 
- *
- * @author Ayesha Gurnani, Rutali  Viraj
+ * Strongly Connected Components
+ * @author Ayesha Gurnani : ang170003
+ * @author Rutali Bandivadekar : rdb170002
+ * @author Viraj Mavani : vdm180000
  * Usage: Computes the number of strongly connected components in a graph
  */
 

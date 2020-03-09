@@ -1,7 +1,7 @@
-/** Starter code for LP2
- *  @author Ayesha Gurnani (ang170003)
- *  @author Rutali Bandivadekar 
- *  @author Viraj Mavani (vdm180000)
+/** Euler Tour
+ * @author Ayesha Gurnani : ang170003
+ * @author Rutali Bandivadekar : rdb170002
+ * @author Viraj Mavani : vdm180000
  */
 
 // change to your netid
@@ -13,9 +13,8 @@ import idsa.Graph.Edge;
 import idsa.Graph.GraphAlgorithm;
 import idsa.Graph.Factory;
 import idsa.Graph.Timer;
-import idsa.Graph.AdjList;
 
-import java.io.FileInputStream;
+
 import java.util.*;
 import java.io.File;
 
